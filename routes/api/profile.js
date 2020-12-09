@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
-const user = require('../../models/User');
+const User = require('../../models/User');
 const { check, validationResult } = require('express-validator');
 
 // @route   GET api/profile/me
@@ -138,6 +138,26 @@ router.get('/user/:user_id', async (req, res) => {
     // error occurred because of a invalid ObjectId
     if (err.kind === 'ObjectId') return res.status(400).json({ msg: 'Profile not found' });
 
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   DELETE api/profile
+// @desc delete profile, user, and post
+// @access private
+router.delete('/', auth, async (req, res) => {
+  try {
+    // ********** REMEMBER to remove user's posts as well **********
+
+    // remove profile
+    await Profile.findOneAndRemove({ user: req.user.id });
+
+    // remove user
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: 'User deleted' });
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send('Server error');
   }
 });
