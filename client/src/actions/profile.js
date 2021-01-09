@@ -7,6 +7,7 @@ import {
   UPDATE_PROFILE,
   ACCOUNT_DELETED,
   GET_PROFILES,
+  GET_REPOS,
 } from './types';
 
 // get current user's profile
@@ -46,6 +47,20 @@ export const getProfileById = (userId) => async (dispatch) => {
     const res = await axios.get(`/api/profile/user/${userId}`);
 
     dispatch({ type: GET_PROFILE, payload: res.data });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// get GitHub repos
+export const getGithubRepos = (username) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/github/${username}`);
+
+    dispatch({ type: GET_REPOS, payload: res.data });
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
