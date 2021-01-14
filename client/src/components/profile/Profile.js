@@ -6,6 +6,7 @@ import { getProfileById } from '../../actions/profile';
 import ProfileTop from './ProfileTop';
 import ProfileAbout from './ProfileAbout';
 import ProfileExperience from './ProfileExperience';
+import ProfileEducation from './ProfileEducation';
 import { Link } from 'react-router-dom';
 
 const Profile = ({ getProfileById, profile: { profile, loading }, auth, match }) => {
@@ -29,7 +30,9 @@ const Profile = ({ getProfileById, profile: { profile, loading }, auth, match })
           )}
           <div className='profile-grid my-1'>
             <ProfileTop profile={profile} />
+
             <ProfileAbout profile={profile} />
+
             <div className='profile-exp bg-white p-2'>
               <h2 className='text-primary'>Experience</h2>
               {profile.experience.length > 0 ? (
@@ -39,7 +42,20 @@ const Profile = ({ getProfileById, profile: { profile, loading }, auth, match })
                   ))}
                 </Fragment>
               ) : (
-                <h4>No experience added by user.</h4>
+                <h4>No Experience Added by User.</h4>
+              )}
+            </div>
+
+            <div className='profile-edu bg-white p-2'>
+              <h2 className='text-primary'>Education</h2>
+              {profile.education.length > 0 ? (
+                <Fragment>
+                  {profile.education.map((edu) => (
+                    <ProfileEducation key={edu._id} education={edu} />
+                  ))}
+                </Fragment>
+              ) : (
+                <h4>No Education Added by User.</h4>
               )}
             </div>
           </div>
