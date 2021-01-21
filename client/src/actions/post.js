@@ -135,3 +135,22 @@ export const addComment = (PostId, formData) => async (dispatch) => {
     });
   }
 };
+
+// delete comment
+export const deleteComment = (PostId, commentId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
+
+    dispatch({
+      type: REMOVE_COMMENT,
+      payload: commentId,
+    });
+
+    dispatch(setAlert('Comment Removed', 'success'));
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
